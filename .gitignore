@@ -111,3 +111,6 @@ logs/
 
 # TypeScript build info
 *.tsbuildinfo
+
+# Drizzle migrations output
+drizzle/
