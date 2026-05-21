@@ -114,3 +114,11 @@ logs/
 
 # Drizzle migrations output
 drizzle/
+
+# Compiled config/api artifacts
+drizzle.config.js
+drizzle.config.d.ts
+drizzle.config.js.map
+api/*.js
+api/*.d.ts
+api/*.js.map
