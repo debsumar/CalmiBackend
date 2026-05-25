@@ -112,8 +112,8 @@ logs/
 # TypeScript build info
 *.tsbuildinfo
 
-# Drizzle migrations output
-drizzle/
+# Drizzle migrations output (root-level only — don't catch src/drizzle/)
+/drizzle/
 
 # Compiled config/api artifacts
 drizzle.config.js
@@ -122,3 +122,4 @@ drizzle.config.js.map
 api/*.js
 api/*.d.ts
 api/*.js.map
+.vercel
