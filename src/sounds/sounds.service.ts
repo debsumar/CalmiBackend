@@ -1,35 +1,35 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { and, desc, eq, type SQL } from 'drizzle-orm';
-import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
-import { DRIZZLE } from '../drizzle/drizzle.module';
-import { sounds, type Sound } from '../drizzle/schema';
+import { Injectable } from '@nestjs/common';
+import type { Sound } from '../drizzle/schema';
 import { FetchSoundsDto } from './dto/fetch-sounds.dto';
+import { SoundsRepository } from './sounds.repository';
 
+/**
+ * Business-logic layer for sounds.
+ *
+ * Today this is a thin orchestrator over the repository. It is the
+ * intentional home for things that are NOT data access:
+ *   - access-control rules (e.g. hide premium sounds for free users)
+ *   - response shaping / projection
+ *   - cross-aggregate composition (e.g. join with favorites for a user)
+ *   - cache layers, instrumentation, side-effects
+ *
+ * The controller talks to this layer; this layer talks to the repository.
+ */
 @Injectable()
 export class SoundsService {
-  constructor(
-    @Inject(DRIZZLE) private readonly db: PostgresJsDatabase,
-  ) {}
+  constructor(private readonly soundsRepository: SoundsRepository) {}
 
   /**
-   * Fetches sounds with optional category and featured filters,
-   * ordered featured-first then newest-first.
+   * Fetch the public sounds catalog using the validated query DTO.
+   * Translates the DTO → repository options. No persistence concerns
+   * here.
    */
   async fetchSounds(dto: FetchSoundsDto): Promise<Sound[]> {
-    const filters: SQL[] = [];
-    if (dto.categoryId) {
-      filters.push(eq(sounds.categoryId, dto.categoryId));
-    }
-    if (dto.featuredOnly) {
-      filters.push(eq(sounds.isFeatured, true));
-    }
-
-    return this.db
-      .select()
-      .from(sounds)
-      .where(filters.length ? and(...filters) : undefined)
-      .orderBy(desc(sounds.isFeatured), desc(sounds.createdAt))
-      .limit(dto.limit ?? 100)
-      .offset(dto.offset ?? 0);
+    return this.soundsRepository.findAll({
+      categoryId: dto.categoryId,
+      featuredOnly: dto.featuredOnly,
+      limit: dto.limit,
+      offset: dto.offset,
+    });
   }
 }

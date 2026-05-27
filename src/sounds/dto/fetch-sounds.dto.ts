@@ -1,5 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { Transform, Type } from 'class-transformer';
+import { Type } from 'class-transformer';
 import {
   IsBoolean,
   IsInt,
@@ -10,17 +10,24 @@ import {
 } from 'class-validator';
 
 /**
- * Query DTO for `GET /sounds`.
- * All fields are optional — calling the endpoint with no params returns
- * the full list (capped at `limit`).
+ * Body DTO for `POST /sounds/fetch`.
+ *
+ * All fields are optional — sending an empty body `{}` returns the
+ * full catalog (subject to the default `limit`).
+ *
+ * Example payloads:
+ *   {}                                                     → full list
+ *   { "categoryId": "5ffde8dc-..." }                       → one category
+ *   { "featuredOnly": true }                               → 9 featured rows
+ *   { "categoryId": "5ffde8dc-...", "featuredOnly": true } → both filters
+ *   { "limit": 20, "offset": 20 }                          → pagination page 2
  */
 export class FetchSoundsDto {
   /**
-   * Filter by sound_categories.id. Pass the UUID returned from the
-   * categories endpoint or seeded sound_categories table.
+   * Filter by sound_categories.id.
    */
   @ApiPropertyOptional({
-    description: 'Filter sounds by sound_categories.id',
+    description: 'Filter by sound_categories.id (UUID)',
     format: 'uuid',
     example: '5ffde8dc-02f0-4fc7-a912-263d7ac80bfa',
   })
@@ -29,15 +36,14 @@ export class FetchSoundsDto {
   categoryId?: string;
 
   /**
-   * Restrict results to is_featured = true. Accepts the strings
-   * 'true' / 'false' on the query string.
+   * Restrict to is_featured = true.
    */
   @ApiPropertyOptional({
     description: 'Only return featured sounds',
     default: false,
+    example: false,
   })
   @IsOptional()
-  @Transform(({ value }) => value === 'true' || value === true)
   @IsBoolean()
   featuredOnly?: boolean;
 
@@ -46,6 +52,7 @@ export class FetchSoundsDto {
     default: 100,
     minimum: 1,
     maximum: 200,
+    example: 100,
   })
   @IsOptional()
   @Type(() => Number)
@@ -58,6 +65,7 @@ export class FetchSoundsDto {
     description: 'Pagination offset',
     default: 0,
     minimum: 0,
+    example: 0,
   })
   @IsOptional()
   @Type(() => Number)
