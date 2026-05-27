@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core';
+import { ValidationPipe } from '@nestjs/common';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import express, { Express } from 'express';
@@ -30,6 +31,13 @@ async function bootstrap(): Promise<Express> {
       { logger: ['error', 'warn', 'log'] },
     );
     nestApp.enableCors();
+    nestApp.useGlobalPipes(
+      new ValidationPipe({
+        whitelist: true,
+        transform: true,
+        forbidNonWhitelisted: true,
+      }),
+    );
 
     // Swagger / OpenAPI docs at /api
     const swaggerConfig = new DocumentBuilder()

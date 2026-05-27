@@ -123,3 +123,4 @@ api/*.js
 api/*.d.ts
 api/*.js.map
 .vercel
+.env*

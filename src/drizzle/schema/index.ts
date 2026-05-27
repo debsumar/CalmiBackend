@@ -1,3 +1,2 @@
-// Add your table schemas here
-// Example:
-// export * from './users';
+export * from './sound-categories';
+export * from './sounds';
