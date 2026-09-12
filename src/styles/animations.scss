@@ -1,0 +1,111 @@
+// ─── Reusable Enter/Leave Animations ─────────────────
+// Usage: class="stagger-enter" [style.--index]="i"
+// Scales infinitely via CSS custom property --index
+
+.stagger-enter {
+  animation: staggerFadeUp 0.6s ease-out both;
+  animation-delay: calc(var(--index, 0) * 100ms);
+}
+
+.stagger-leave {
+  animation: staggerFadeDown 0.35s ease-in both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stagger-enter,
+  .stagger-leave {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes staggerFadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes staggerFadeDown {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-8px); }
+}
+
+// ─── Dialog Animation ─────────────────
+.dialog-enter {
+  animation: dialogScaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes dialogScaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+// ─── Equalizer Bars Animation ─────────────────
+.equalizer {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 16px;
+  width: 20px;
+}
+
+.equalizer span {
+  width: 3px;
+  background: white;
+  border-radius: 1px;
+  animation: eqBounce 0.8s ease-in-out infinite alternate;
+}
+
+.equalizer span:nth-child(1) { height: 40%; animation-delay: 0s; }
+.equalizer span:nth-child(2) { height: 70%; animation-delay: 0.2s; }
+.equalizer span:nth-child(3) { height: 50%; animation-delay: 0.4s; }
+.equalizer span:nth-child(4) { height: 80%; animation-delay: 0.1s; }
+
+.equalizer.paused span {
+  animation-play-state: paused;
+}
+
+@keyframes eqBounce {
+  0% { transform: scaleY(0.3); }
+  100% { transform: scaleY(1); }
+}
+
+// ─── Logo Breathing Animation ─────────────────
+@keyframes logoBreathe {
+  0% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.06); opacity: 1; filter: drop-shadow(0 0 12px rgba(150, 123, 182, 0.4)); }
+  100% { transform: scale(1); opacity: 0.9; }
+}
+
+.logo-pulse {
+  animation: logoBreathe 2.2s ease-in-out infinite;
+  display: inline-block;
+}
+
+// ─── PrimeNG Dialog Glass Mask Backdrop ─────────────────
+::ng-deep .p-dialog-mask,
+.p-dialog-mask {
+  background-color: rgba(9, 5, 20, 0.45) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+}
+
+// ─── Smooth Dialog Content Stagger Animation ─────────────────
+.dialog-stagger-item {
+  opacity: 0;
+  animation: dialogFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: calc(var(--index, 0) * 180ms);
+}
+
+@keyframes dialogFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+

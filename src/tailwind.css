@@ -1,0 +1,253 @@
+﻿@import "tailwindcss";
+@import "../node_modules/tailwindcss-primeui/v4/index.css";
+
+@variant dark (&:where([class*="app-dark"], [class*="app-dark"] *));
+
+/* Every role below is derived from the live theme palette. The only literals are
+   `white`, `black` and `transparent`, which are anchors, not brand decisions.
+   Change the seed (ThemeService.setPrimary) and every surface, border, glass
+   layer and gradient stop follows without a rebuild.
+
+   `color-mix()` needs no fallback: Tailwind 4 already requires Chrome 111+ /
+   Safari 16.4+ / Firefox 128+, which all support it. */
+@layer base {
+  :root {
+    --calmi-canvas: color-mix(in srgb, var(--color-brand) 5%, white);
+    --calmi-surface: white;
+    --calmi-elevated: white;
+    --calmi-sunken: color-mix(in srgb, var(--color-brand) 10%, white);
+    --calmi-sunken-alt: color-mix(in srgb, var(--color-brand) 15%, white);
+    --calmi-hairline: color-mix(in srgb, var(--color-brand) 12%, white);
+    --calmi-glass: color-mix(in srgb, white 60%, transparent);
+    --calmi-voice-scrim: color-mix(in srgb, var(--calmi-surface) 82%, transparent);
+    --calmi-voice-core: white;
+    --calmi-composer-trace: linear-gradient(
+      100deg,
+      transparent 18%,
+      color-mix(in srgb, var(--color-brand-light) 55%, transparent) 50%,
+      transparent 82%
+    );
+    --calmi-composer-glow: color-mix(in srgb, var(--color-brand-light) 32%, transparent);
+    --calmi-voice-end: color-mix(in srgb, var(--color-accent-coral) 68%, black);
+    --calmi-on-voice-end: white;
+    --calmi-aurora-composite: multiply;
+    --calmi-scrim: color-mix(in srgb, black 45%, transparent);
+    /* Media roles. Photos are user content: their luminance is unknown and does
+       not follow the scheme, so these two are deliberately scheme-invariant and
+       are the only safe pairing for text painted over an image. `scrim-strong`
+       is 65% black because the worst case - a blown-out white portrait - still
+       composites to #595959, which keeps white copy at 6.9:1 (above the 4.5:1
+       body bar). Never use `on-brand`/`ink` on top of media. */
+    --calmi-scrim-strong: color-mix(in srgb, black 65%, transparent);
+    --calmi-on-media: white;
+    --calmi-shadow-aurora: 0 12px 34px color-mix(in srgb, var(--color-brand) 42%, transparent);
+    --calmi-on-coral: white;
+    --calmi-success: var(--p-success-700);
+    --calmi-danger: var(--p-danger-700);
+    /* Dark ink keeps normal CTA labels contrast-safe on the lavender brand fill. */
+    --calmi-on-brand: color-mix(in srgb, var(--color-brand) 12%, black);
+    /* `brand-deep` (primary-600) is too dark to reuse `on-brand`: that dark ink
+       lands at 3.98:1, under the 4.5:1 body-text bar, while white reaches
+       4.76:1. So the deep fill owns its own foreground role. Scheme-invariant,
+       because `brand-deep` itself does not flip. */
+    --calmi-on-brand-deep: white;
+    /* Text roles are near-neutral on purpose: content reads as ink, not brand.
+       The small brand percentage keeps them seed-tracking without tinting copy
+       lavender. Retune the percentage, never swap in a literal gray. */
+    --calmi-ink: color-mix(in srgb, var(--color-brand) 10%, black);
+    --calmi-ink-soft: color-mix(in srgb, var(--calmi-ink) 72%, white);
+    --calmi-ink-muted: color-mix(in srgb, var(--calmi-ink) 56%, white);
+    --calmi-on-hero: var(--p-primary-950, #261f2e);
+
+    --calmi-shadow-card: 0 4px 4px 0 rgb(0 0 0 / 0.25);
+    --calmi-shadow-player: 0 -4px 20px rgb(0 0 0 / 0.1);
+    --calmi-shadow-accent-coral: 0 10px 20px color-mix(in srgb, var(--color-accent-coral) 30%, transparent);
+    --calmi-shadow-accent-gold: 0 10px 30px color-mix(in srgb, var(--color-accent-gold) 20%, transparent);
+  }
+
+  /* Must out-specify :root (0,1,0) or the dark values never apply.
+     .app-dark is toggled on <html>, so :root[class*="app-dark"] is (0,2,0). */
+  :root[class*="app-dark"] {
+    --calmi-canvas: color-mix(in srgb, var(--color-brand) 7%, black);
+    --calmi-surface: color-mix(in srgb, var(--color-brand) 32%, black);
+    --calmi-elevated: color-mix(in srgb, var(--color-brand) 13%, black);
+    --calmi-sunken: color-mix(in srgb, var(--color-brand) 19%, black);
+    --calmi-sunken-alt: color-mix(in srgb, var(--color-brand) 13%, black);
+    --calmi-hairline: color-mix(in srgb, var(--color-brand) 40%, black);
+    --calmi-glass: color-mix(in srgb, var(--calmi-elevated) 55%, transparent);
+    --calmi-voice-scrim: color-mix(in srgb, var(--calmi-surface) 92%, transparent);
+    --calmi-voice-core: color-mix(in srgb, var(--color-brand-light) 72%, var(--color-brand) 28%);
+    --calmi-composer-trace: linear-gradient(
+      100deg,
+      transparent 18%,
+      color-mix(in srgb, var(--color-brand-light) 55%, transparent) 50%,
+      transparent 82%
+    );
+    --calmi-composer-glow: color-mix(in srgb, var(--color-brand-light) 32%, transparent);
+    --calmi-voice-end: color-mix(in srgb, var(--color-accent-coral) 68%, black);
+    --calmi-on-voice-end: white;
+    --calmi-aurora-composite: normal;
+    --calmi-shadow-aurora: 0 12px 34px color-mix(in srgb, var(--color-brand) 42%, transparent);
+    --calmi-success: var(--p-success-300);
+    --calmi-danger: var(--p-danger-300);
+    --calmi-on-brand: color-mix(in srgb, var(--color-brand) 12%, black);
+    --calmi-on-brand-deep: white;
+    --calmi-ink: color-mix(in srgb, var(--color-brand) 6%, white);
+    --calmi-ink-soft: color-mix(in srgb, var(--color-brand) 18%, white);
+    --calmi-ink-muted: color-mix(in srgb, var(--color-brand) 34%, white);
+    --calmi-on-hero: white;
+
+    --calmi-shadow-card: 0 4px 4px 0 rgb(0 0 0 / 0.5);
+    --calmi-shadow-player: 0 -4px 20px rgb(0 0 0 / 0.4);
+  }
+
+  /* Glass is a deliberate part of the visual language, but it must degrade to an
+     opaque surface when the user asks for reduced transparency. */
+  @media (prefers-reduced-transparency: reduce) {
+    :root {
+      --calmi-glass: var(--calmi-surface);
+      --calmi-voice-scrim: var(--calmi-surface);
+      --calmi-composer-trace: none;
+      --calmi-composer-glow: transparent;
+    }
+    :root[class*="app-dark"] {
+      --calmi-glass: var(--calmi-elevated);
+      --calmi-voice-scrim: var(--calmi-elevated);
+      --calmi-composer-trace: none;
+      --calmi-composer-glow: transparent;
+    }
+  }
+}
+
+@theme {
+  --font-sans: 'Bricolage Grotesque', sans-serif;
+
+  /* Brand bridge: the generated primary palette drives every brand utility.
+     Hex fallbacks cover the first paint, before PrimeNG injects --p-primary-*. */
+  --color-brand: var(--p-primary-500, #967bb6);
+  --color-brand-light: var(--p-primary-300, #beadd2);
+  --color-brand-dark: var(--p-primary-700, #69567f);
+  --color-brand-soft: var(--p-primary-400, #aa94c4);
+  --color-brand-deep: var(--p-primary-600, #80699b);
+
+  /* Scheme-aware neutral roles, derived above from the brand palette. */
+  --color-canvas: var(--calmi-canvas);
+  --color-surface: var(--calmi-surface);
+  --color-elevated: var(--calmi-elevated);
+  --color-sunken: var(--calmi-sunken);
+  --color-sunken-alt: var(--calmi-sunken-alt);
+  --color-hairline: var(--calmi-hairline);
+  --color-glass: var(--calmi-glass);
+  --color-voice-scrim: var(--calmi-voice-scrim);
+  --color-voice-core: var(--calmi-voice-core);
+  --color-voice-end: var(--calmi-voice-end);
+  --color-on-voice-end: var(--calmi-on-voice-end);
+  --color-scrim: var(--calmi-scrim);
+  --color-scrim-strong: var(--calmi-scrim-strong);
+  --color-on-media: var(--calmi-on-media);
+  --color-on-coral: var(--calmi-on-coral);
+  --color-success: var(--calmi-success);
+  --color-danger: var(--calmi-danger);
+  --color-on-brand: var(--calmi-on-brand);
+  --color-on-brand-deep: var(--calmi-on-brand-deep);
+  --color-ink: var(--calmi-ink);
+  --color-ink-soft: var(--calmi-ink-soft);
+  --color-ink-muted: var(--calmi-ink-muted);
+  --color-on-hero: var(--calmi-on-hero);
+
+  /* Accent palettes registered in core/theme/calmi-preset.ts. */
+  --color-accent-coral: var(--p-coral-500, #e8724a);
+  --color-accent-gold: var(--p-gold-500, #f5b731);
+  --color-accent-pink: var(--p-pink-500, #f2a0b0);
+  /* Decorative green. Distinct from `--color-success`, which flips light/dark
+     for status text; this one must stay dark enough for white icons in both. */
+  --color-accent-green: var(--p-success-600, #2a7030);
+
+  /* Decorative stops, all derived from the brand palette. */
+  /* Hero fill is mixed toward black, not white: at 86% brand it clears WCAG AA
+     (4.70:1) for plain white body copy sitting on top of it. */
+  --color-hero: color-mix(in srgb, var(--color-brand) 86%, black);
+  --color-hero-grad-from: color-mix(in srgb, var(--color-brand) 19%, black);
+  --color-hero-grad-to: color-mix(in srgb, var(--color-brand) 9%, black);
+  --color-brand-night: color-mix(in srgb, var(--color-brand) 28%, black);
+  --color-player-from: color-mix(in srgb, var(--color-brand) 11%, black);
+  --color-player-to: color-mix(in srgb, var(--color-brand) 16%, black);
+
+  --shadow-card: var(--calmi-shadow-card);
+  --shadow-aurora: var(--calmi-shadow-aurora);
+  --shadow-player: var(--calmi-shadow-player);
+  --drop-shadow-accent-coral: var(--calmi-shadow-accent-coral);
+  --drop-shadow-accent-gold: var(--calmi-shadow-accent-gold);
+
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+  --breakpoint-2xl: 1920px;
+}
+
+
+
+/* Shared verification and app motion contract. Components consume these tokens;
+   keyframes stay global so motion can be cancelled consistently across panes. */
+@layer base {
+  :root {
+    --dur-instant: 0ms;
+    --dur-fast: 180ms;
+    --dur-base: 320ms;
+    --dur-slow: 620ms;
+    --dur-loop: 1800ms;
+    --motion-grace: 40ms;
+    --stagger-step: 80ms;
+    --ease-out: cubic-bezier(.25, .8, .25, 1);
+    --ease-spring: cubic-bezier(.17, 1.4, .3, 1);
+    --ease-standard: ease;
+  }
+}
+
+@keyframes gentleUp { from { opacity: 0; transform: translateY(.9rem); } to { opacity: 1; transform: translateY(0); } }
+@keyframes ribbonPulse { from { transform: scale(1); } to { transform: scale(1.035); } }
+@keyframes softSpring { 0% { opacity: 0; transform: scale(.92) translateY(.6rem); } 72% { opacity: 1; transform: scale(1.02) translateY(-.1rem); } to { opacity: 1; transform: scale(1) translateY(0); } }
+@keyframes scrimFadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes scrimFadeOut { from { opacity: 1; } to { opacity: 0; } }
+@keyframes dialogOut { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(.5rem) scale(.97); } }
+@keyframes paneForward { from { opacity: 0; transform: translateX(1.25rem); } to { opacity: 1; transform: translateX(0); } }
+@keyframes paneBackward { from { opacity: 0; transform: translateX(-1.25rem); } to { opacity: 1; transform: translateX(0); } }
+@keyframes paneExitForward { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(-1rem); } }
+@keyframes paneExitBackward { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(1rem); } }
+@keyframes connectorFill { from { background-size: 0% 100%; } to { background-size: 100% 100%; } }
+@keyframes stepCurrent { from { transform: scale(.98); } to { transform: scale(1); } }
+@keyframes dropzonePulse { from { opacity: .96; transform: scale(1); } to { opacity: 1; transform: scale(1.005); } }
+@keyframes errorIn { from { opacity: 0; transform: translateX(-.5rem); } 60% { opacity: 1; transform: translateX(.12rem); } to { opacity: 1; transform: translateX(0); } }
+@keyframes otpPop { 0% { transform: scale(.9); } 70% { transform: scale(1.08); } to { transform: scale(1); } }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-.35rem); } 75% { transform: translateX(.35rem); } }
+@keyframes breathe { 0%, 100% { transform: scale(1); opacity: .72; } 50% { transform: scale(1.08); opacity: 1; } }
+@keyframes successPop { from { opacity: 0; transform: scale(.7); } 70% { opacity: 1; transform: scale(1.08); } to { opacity: 1; transform: scale(1); } }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes clockTick { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(8deg); } }
+@keyframes strikeDraw { to { transform: scaleX(1); } }
+@keyframes alertIn { from { opacity: 0; transform: translateY(-.5rem); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slide { 0% { transform: translateX(-100%); } 100% { transform: translateX(250%); } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition-duration: var(--dur-instant) !important;
+    scroll-behavior: auto !important;
+  }
+  .progress > i { width: 100%; transform: none; }
+  .scrim, .scrim.is-open, .scrim.is-closing,
+  .verification-scrim, .verification-scrim--open, .verification-scrim--closing { opacity: 1; }
+  .dialog, .pane, .panel.plan,
+  .verification-dialog, .verification-pane { opacity: 1; transform: none; }
+  .checking-indicator { opacity: 1; transform: none; }
+  .strike::after { transform: scaleX(1); }
+}
+
+:root.reduce-motion *,
+:root.reduce-motion *::before,
+:root.reduce-motion *::after {
+  animation: none !important;
+  transition-duration: var(--dur-instant) !important;
+  scroll-behavior: auto !important;
+}
