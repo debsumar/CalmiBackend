@@ -1,6 +1,16 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsEmail, IsInt, IsOptional, IsUUID, Max, Min } from 'class-validator';
+import {
+  IsBoolean,
+  IsEmail,
+  IsEnum,
+  IsInt,
+  IsOptional,
+  IsUUID,
+  Max,
+  Min,
+} from 'class-validator';
+import { Platform } from '../../utils/constants';
 
 /**
  * Body DTO for `POST /profile/waiting/list`.
@@ -12,6 +22,7 @@ import { IsEmail, IsInt, IsOptional, IsUUID, Max, Min } from 'class-validator';
  *   {}                                          → full list
  *   { "email": "someone@example.com" }          → single sign-up lookup
  *   { "userId": "5ffde8dc-..." }                → entries linked to a user
+ *   { "platform": 1 }                           → entries from one platform
  *   { "limit": 20, "offset": 20 }               → pagination page 2
  */
 export class ListWaitlistDto {
@@ -38,6 +49,36 @@ export class ListWaitlistDto {
   @IsOptional()
   @IsUUID()
   userId?: string;
+
+  /**
+   * Filter by the platform the sign-up came from.
+   * Legacy rows have a null platform and never match this filter.
+   */
+  @ApiPropertyOptional({
+    enum: Platform,
+    enumName: 'Platform',
+    description: 'Filter by waitlist.platform — 1 = web',
+    example: Platform.WEB,
+  })
+  @IsOptional()
+  @Type(() => Number)
+  @IsEnum(Platform)
+  platform?: Platform;
+
+  /**
+   * Active-status filter. Defaults to `true`, so a caller that says
+   * nothing gets only active sign-ups. Pass `false` to inspect
+   * deactivated rows.
+   */
+  @ApiPropertyOptional({
+    description:
+      'Filter by waitlist.is_active. Defaults to true (active rows only).',
+    default: true,
+    example: true,
+  })
+  @IsOptional()
+  @IsBoolean()
+  isActive?: boolean = true;
 
   @ApiPropertyOptional({
     description: 'Maximum rows to return',
