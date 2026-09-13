@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import { DrizzleModule } from './drizzle/drizzle.module';
 import { AuthModule } from './auth/auth.module';
 import { SoundsModule } from './sounds/sounds.module';
+import { ProfileModule } from './profile/profile.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { SoundsModule } from './sounds/sounds.module';
     DrizzleModule,
     AuthModule,
     SoundsModule,
+    ProfileModule,
   ],
   controllers: [AppController],
   providers: [AppService],
